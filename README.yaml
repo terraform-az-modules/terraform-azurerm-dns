@@ -11,7 +11,7 @@ name : Terraform Azure Module Template
 license: "APACHE"
 
 # Canonical GitHub repo
-github_repo: terraform-az-modules/terraform-module-template
+github_repo: terraform-az-modules/terraform-azure-dns
 
 # Badges to display
 badges:
