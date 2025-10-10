@@ -2,7 +2,7 @@
 ## Tagging Module – Applies standard tags to all resources
 ##-----------------------------------------------------------------------------
 module "labels" {
-  source          = "terraform-az-modules/tags/azure"
+  source          = "terraform-az-modules/labels/azure"
   version         = "1.0.0"
   name            = var.dns_zone_names
   location        = var.location
