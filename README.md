@@ -3,7 +3,7 @@
   <img src="https://github.com/user-attachments/assets/5b2ab201-5926-46fa-b0a2-07a6f406ab6d" alt="Banner" />
 </p>
 <h1 align="center">
-    Terraform Azure Module Template
+    Terraform Azure DNS
 </h1>
 
 <p align="center" style="font-size: 1.2rem;">
@@ -57,7 +57,7 @@ This table contains both Prerequisites and Providers:
 | Description   | Name                                       | Version   |
 |:-------------:|:-------------------------------------------:|:---------:|
 | **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.6.6 |
-| **Provider** | [azure](https://azure.microsoft.com/) | >= 3.90.0 |
+| **Provider** | [azure](https://azure.microsoft.com/) | >= 3.86.0 |
 
 
 
@@ -65,56 +65,101 @@ This table contains both Prerequisites and Providers:
 
 ## Examples
 
-**IMPORTANT:** Since the master branch used in source varies based on new modifications, we recommend using the [release versions](https://github.com/terraform-az-modules/terraform-module-template/releases).
+**IMPORTANT:** Since the master branch used in source varies based on new modifications, we recommend using the [release versions](https://github.com/terraform-az-modules/terraform-azure-dns/releases).
 
 📌 For additional usage examples, check the complete list under [`examples/`](./examples) directory.
 
 
+<!-- BEGIN_TF_DOCS -->
+<a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6.6 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >=3.86.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.0.0 |
 
-## Inputs and Outputs
+## Providers
 
-### Inputs
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >=3.86.0 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_labels"></a> [labels](#module\_labels) | terraform-az-modules/tags/azure | 1.0.0 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_dns_a_record.records_a](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_a_record) | resource |
+| [azurerm_dns_aaaa_record.records_aaaa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_aaaa_record) | resource |
+| [azurerm_dns_caa_record.records_caa](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_caa_record) | resource |
+| [azurerm_dns_cname_record.records_cname](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_cname_record) | resource |
+| [azurerm_dns_mx_record.records_mx](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_mx_record) | resource |
+| [azurerm_dns_ns_record.records_ns](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_ns_record) | resource |
+| [azurerm_dns_ptr_record.records_ptr](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_ptr_record) | resource |
+| [azurerm_dns_srv_record.records_srv](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_srv_record) | resource |
+| [azurerm_dns_txt_record.records_txt](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_txt_record) | resource |
+| [azurerm_dns_zone.main](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_zone) | resource |
+
+## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| label_order | Label order, e.g. `name`,`application`,`centralus`. | `list(any)` | <pre>["name","environment",  "location"]</pre> | no |
+| <a name="input_a_records"></a> [a\_records](#input\_a\_records) | List of a records to be added in azure dns zone. | <pre>list(object({<br/>    name    = string<br/>    ttl     = number<br/>    records = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_aaaa_records"></a> [aaaa\_records](#input\_aaaa\_records) | List of AAAA records | <pre>list(object({<br/>    name    = string<br/>    ttl     = number<br/>    records = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_addon_virtual_network_id"></a> [addon\_virtual\_network\_id](#input\_addon\_virtual\_network\_id) | The name of the virtual network | `string` | `null` | no |
+| <a name="input_caa_records"></a> [caa\_records](#input\_caa\_records) | List of CAA records | <pre>list(object({<br/>    name = string<br/>    ttl  = number<br/>    records = list(object({<br/>      flags = number<br/>      tag   = string<br/>      value = string<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_cname_records"></a> [cname\_records](#input\_cname\_records) | List of cname records | <pre>list(object({<br/>    name   = string<br/>    ttl    = number<br/>    record = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_deployment_mode"></a> [deployment\_mode](#input\_deployment\_mode) | Specifies how the infrastructure/resource is deployed | `string` | `"terraform"` | no |
+| <a name="input_dns_zone_names"></a> [dns\_zone\_names](#input\_dns\_zone\_names) | The public dns zone to be created for internal vnet resolution | `string` | `null` | no |
+| <a name="input_enable"></a> [enable](#input\_enable) | Flag to control complete module creation. | `bool` | `true` | no |
+| <a name="input_enable_private_dns"></a> [enable\_private\_dns](#input\_enable\_private\_dns) | Flag to control creation of private dns | `bool` | `false` | no |
+| <a name="input_enable_public_dns"></a> [enable\_public\_dns](#input\_enable\_public\_dns) | Flag to control creation of public dns | `bool` | `true` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `null` | no |
+| <a name="input_extra_tags"></a> [extra\_tags](#input\_extra\_tags) | Variable to pass extra tags. | `map(string)` | `null` | no |
+| <a name="input_label_order"></a> [label\_order](#input\_label\_order) | The order of labels used to construct resource names or tags. If not specified, defaults to ['name', 'environment', 'location']. | `list(string)` | <pre>[<br/>  "name",<br/>  "environment",<br/>  "location"<br/>]</pre> | no |
+| <a name="input_location"></a> [location](#input\_location) | The location/region where the virtual network is created. Changing this forces a new resource to be created. | `string` | `null` | no |
+| <a name="input_managedby"></a> [managedby](#input\_managedby) | ManagedBy, eg 'terraform-az-modules'. | `string` | `"terraform-az-modules"` | no |
+| <a name="input_mx_records"></a> [mx\_records](#input\_mx\_records) | List of MX records | <pre>list(object({<br/>    name = string<br/>    ttl  = number<br/>    records = list(object({<br/>      preference = number<br/>      exchange   = string<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name  (e.g. `app` or `cluster`). | `string` | `null` | no |
+| <a name="input_ns_records"></a> [ns\_records](#input\_ns\_records) | List of ns records | <pre>list(object({<br/>    name    = string,      #(Required) The name of the DNS NS Record. Changing this forces a new resource to be created.<br/>    ttl     = number,      # (Required) The Time To Live (TTL) of the DNS record in seconds.<br/>    records = list(string) #(Required) A list of values that make up the NS record.<br/>  }))</pre> | `[]` | no |
+| <a name="input_private_a_records"></a> [private\_a\_records](#input\_private\_a\_records) | List of cname records | <pre>list(object({<br/>    name    = string<br/>    ttl     = number<br/>    records = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_private_cname_records"></a> [private\_cname\_records](#input\_private\_cname\_records) | List of cname records | <pre>list(object({<br/>    name   = string<br/>    ttl    = number<br/>    record = string<br/>  }))</pre> | `[]` | no |
+| <a name="input_private_dns_zone_name"></a> [private\_dns\_zone\_name](#input\_private\_dns\_zone\_name) | The private dns zone to be created for internal vnet resolution | `string` | `null` | no |
+| <a name="input_private_registration_enabled"></a> [private\_registration\_enabled](#input\_private\_registration\_enabled) | Is auto-registration of virtual machine records in the virtual network in the Private DNS zone enabled? Default to false | `bool` | `false` | no |
+| <a name="input_ptr_records"></a> [ptr\_records](#input\_ptr\_records) | List of PTR records | <pre>list(object({<br/>    name    = string<br/>    ttl     = number<br/>    records = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_repository"></a> [repository](#input\_repository) | Terraform current module repo | `string` | `"https://github.com/terraform-az-modules/terraform-azure-dns"` | no |
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The name of the resource group where the Azure DNS resides | `string` | `""` | no |
+| <a name="input_soa_record"></a> [soa\_record](#input\_soa\_record) | Customize details about the root block device of the instance. See Block Devices below for details. | `list(object({}))` | `[]` | no |
+| <a name="input_soa_record_private_dns"></a> [soa\_record\_private\_dns](#input\_soa\_record\_private\_dns) | Customize details about the root block device of the instance. See Block Devices below for details. | `list(object({}))` | `[]` | no |
+| <a name="input_srv_records"></a> [srv\_records](#input\_srv\_records) | List of SRV records | <pre>list(object({<br/>    name = string<br/>    ttl  = number<br/>    records = list(object({<br/>      priority = number<br/>      weight   = number<br/>      port     = number<br/>      target   = string<br/>    }))<br/>  }))</pre> | `[]` | no |
+| <a name="input_txt_records"></a> [txt\_records](#input\_txt\_records) | List of TXT records | <pre>list(object({<br/>    name    = string<br/>    ttl     = number<br/>    records = list(string)<br/>  }))</pre> | `[]` | no |
+| <a name="input_virtual_network_id"></a> [virtual\_network\_id](#input\_virtual\_network\_id) | The name of the virtual network | `string` | `""` | no |
 
-### Outputs
+## Outputs
 
 | Name | Description |
 |------|-------------|
-| label_order | Label order, e.g. `name`,`application`,`centralus`. |
-
-
-
-<!-- 
-## Module Dependencies
-
-This module has dependencies on:
-
-- [Labels Module](https://github.com/terraform-az-modules/terraform-azure-tags): Provides resource tagging.
- -->
-
-
-## Module Dependencies
-
-This module has dependencies on:
-- [Labels Module](https://github.com/terraform-az-modules/terraform-azure-tags): Provides resource tagging.
-
-
-## 📑 Changelog
-
-Refer [here](CHANGELOG.md).
-
-
+| <a name="output_dns_a_record_fqdn"></a> [dns\_a\_record\_fqdn](#output\_dns\_a\_record\_fqdn) | The FQDN of the DNS A Record. |
+| <a name="output_dns_a_record_id"></a> [dns\_a\_record\_id](#output\_dns\_a\_record\_id) | The DNS A Record ID. |
+| <a name="output_dns_cname_record_fqdn"></a> [dns\_cname\_record\_fqdn](#output\_dns\_cname\_record\_fqdn) | The FQDN of the DNS CNAME Record. |
+| <a name="output_dns_cname_record_id"></a> [dns\_cname\_record\_id](#output\_dns\_cname\_record\_id) | The DNS CNAME Record ID. |
+| <a name="output_dns_ns_record_fqdn"></a> [dns\_ns\_record\_fqdn](#output\_dns\_ns\_record\_fqdn) | The FQDN of the DNS NS Record. |
+| <a name="output_dns_ns_record_id"></a> [dns\_ns\_record\_id](#output\_dns\_ns\_record\_id) | The DNS NS Record ID. |
+| <a name="output_dns_zone_id"></a> [dns\_zone\_id](#output\_dns\_zone\_id) | The DNS Zone ID. |
+| <a name="output_dns_zone_max_number_of_record_sets"></a> [dns\_zone\_max\_number\_of\_record\_sets](#output\_dns\_zone\_max\_number\_of\_record\_sets) | Maximum number of Records in the zone. Defaults to 1000. |
+| <a name="output_dns_zone_name_servers"></a> [dns\_zone\_name\_servers](#output\_dns\_zone\_name\_servers) | A list of values that make up the NS record for the zone. |
+| <a name="output_dns_zone_number_of_record_sets"></a> [dns\_zone\_number\_of\_record\_sets](#output\_dns\_zone\_number\_of\_record\_sets) | The number of records already in the zone. |
+<!-- END_TF_DOCS -->
 
 
 ## ✨ Contributors
 
 Big thanks to our contributors for elevating our project with their dedication and expertise! But, we do not wish to stop there, would like to invite contributions from the community in improving these projects and making them more versatile for better reach. Remember, every bit of contribution is immensely valuable, as, together, we are moving in only 1 direction, i.e. forward. 
 
-<a href="https://github.com/terraform-az-modules/terraform-azure-module-template/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=terraform-az-modules/terraform-azure-module-template&max" />
+<a href="https://github.com/terraform-az-modules/terraform-azure-dns/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=terraform-az-modules/terraform-azure-dns&max" />
 </a>
 <br>
 <br>
@@ -129,9 +174,9 @@ Big thanks to our contributors for elevating our project with their dedication a
 
 
 ## Feedback 
-Spot a bug or have thoughts to share with us? Let's squash it together! Log it in our [issue tracker](https://github.com/terraform-az-modules/terraform-azure-module-template/issues), feel free to drop us an email at [hello@clouddrove.com](hello@clouddrove.com)).
+Spot a bug or have thoughts to share with us? Let's squash it together! Log it in our [issue tracker](https://github.com/terraform-az-modules/terraform-azure-dns/issues), feel free to drop us an email at [hello@clouddrove.com](hello@clouddrove.com)).
 
-Show some love with a ★ on [our GitHub](https://github.com/terraform-az-modules/terraform-azure-module-template)!  if our work has brightened your day! – your feedback fuels our journey!
+Show some love with a ★ on [our GitHub](https://github.com/terraform-az-modules/terraform-azure-dns)!  if our work has brightened your day! – your feedback fuels our journey!
 
 
 ## :rocket: Our Accomplishment
