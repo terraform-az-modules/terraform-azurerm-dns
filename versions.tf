@@ -14,4 +14,8 @@ terraform {
       version = ">= 3.0.0" # Your version constraint here
     }
   }
+
+  provider_meta "azurerm" {
+    module_name = "terraform-az-modules/terraform-azurerm-dns"
+  }
 }
